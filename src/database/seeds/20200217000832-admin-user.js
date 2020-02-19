@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   up: queryInterface => {
@@ -17,5 +17,5 @@ module.exports = {
     );
   },
 
-  down: (queryInterface, Sequelize) => {},
+  down: () => {},
 };
