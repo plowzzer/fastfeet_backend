@@ -10,8 +10,6 @@ class RecipientController {
       offset: (page - 1) * 20,
     });
 
-    // const recipients = await Recipients.findAll();
-
     return res.json(recipients);
   }
 
