@@ -78,7 +78,7 @@ describe('Recipient', () => {
     expect(response.body.error).toBe('There is no Recipient with id NuN');
   });
 
-  // it('should not be able to register due a validation', async () => {
+  // it('should not be able to update due a validation', async () => {
   //   const token = await authorize();
   //   const recipient = await factory.attrs('Recipient');
 
