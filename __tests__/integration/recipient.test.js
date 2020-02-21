@@ -104,7 +104,7 @@ describe('Recipient', () => {
       .send({});
 
     expect(response.status).toBe(404);
-    expect(response.body.error).toBe('Recipient not founded');
+    expect(response.body.error).toBe('Recipient not found');
   });
 
   it('should be able to update recipient', async () => {
@@ -133,7 +133,7 @@ describe('Recipient', () => {
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(404);
-    expect(response.body.error).toBe('Recipient not founded');
+    expect(response.body.error).toBe('Recipient not found');
   });
 
   it('should be able to delete a recipient', async () => {

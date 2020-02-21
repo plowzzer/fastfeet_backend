@@ -3,7 +3,10 @@ import { factory } from 'factory-girl';
 
 import User from '../src/app/models/User';
 import Recipient from '../src/app/models/Recipient';
+import Deliveryman from '../src/app/models/Deliveryman';
+import File from '../src/app/models/File';
 
+// https://github.com/marak/Faker.js/
 factory.define('User', User, {
   name: faker.name.findName(),
   email: faker.internet.email(),
@@ -31,6 +34,12 @@ factory.define('RecipientFail', Recipient, {
   state: faker.address.stateAbbr(),
   city: faker.address.city(),
   cep: faker.address.zipCode(),
+});
+
+factory.define('Deliveryman', Deliveryman, {
+  name: faker.name.findName(),
+  email: faker.internet.email(),
+  avatar_id: 1,
 });
 
 export default factory;

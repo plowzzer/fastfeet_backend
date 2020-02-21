@@ -67,7 +67,7 @@ class RecipientController {
     const recipient = await Recipient.findByPk(id);
 
     if (!recipient) {
-      return res.status(404).json({ error: 'Recipient not founded' });
+      return res.status(404).json({ error: 'Recipient not found' });
     }
 
     const resipient_updated = await recipient.update(req.body);
@@ -81,7 +81,7 @@ class RecipientController {
     const recipient = await Recipient.findByPk(id);
 
     if (!recipient) {
-      return res.status(404).json({ error: 'Recipient not founded' });
+      return res.status(404).json({ error: 'Recipient not found' });
     }
 
     await recipient.destroy();

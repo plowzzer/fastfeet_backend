@@ -46,16 +46,26 @@ class DeliverymanController {
   }
 
   async store(req, res) {
-    const schema = Yup.object.shape({
+    const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string()
         .email()
         .required(),
-      avatar_id: Yup.integer(),
+      avatar_id: Yup.number().integer(),
     });
+
+    const { email } = req.body;
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation Fails' });
+    }
+
+    const checkEmail = await Deliveryman.findOne({ where: { email } });
+
+    if (checkEmail) {
+      return res
+        .status(400)
+        .json({ error: `${req.body.email} already registred` });
     }
 
     const deliveryman = await Deliveryman.create(req.body);
@@ -64,18 +74,28 @@ class DeliverymanController {
   }
 
   async update(req, res) {
-    const schema = Yup.object.shape({
+    const schema = Yup.object().shape({
       name: Yup.string(),
       email: Yup.string().email(),
-      avatar_id: Yup.integer(),
+      avatar_id: Yup.number().integer(),
     });
     const { id } = req.params;
+    const { email } = req.body;
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation Fails' });
     }
 
     const deliveryman = await Deliveryman.findOne(id);
+
+    if (email && email !== deliveryman.email) {
+      const checkEmail = await Deliveryman.findOne({ where: { email } });
+      if (checkEmail) {
+        return res
+          .status(400)
+          .json({ error: `${req.body.email} already registred` });
+      }
+    }
 
     if (!deliveryman) {
       return res
@@ -86,6 +106,18 @@ class DeliverymanController {
     const deliveryman_updated = await deliveryman.update(req.body);
 
     return res.json(deliveryman_updated);
+  }
+
+  async delete(req, res) {
+    const { id } = req.params;
+    const deliveryman = await Deliveryman.findOne(id);
+
+    if (!deliveryman) {
+      return res.status(404).json({ error: 'Deliverymen not found' });
+    }
+
+    await deliveryman.destroy();
+    return res.json({ res: 'Deliveryman is deleted' });
   }
 }
 
