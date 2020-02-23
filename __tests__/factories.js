@@ -39,7 +39,6 @@ factory.define('RecipientFail', Recipient, {
 factory.define('Deliveryman', Deliveryman, {
   name: faker.name.findName(),
   email: faker.internet.email(),
-  avatar_id: 1,
 });
 
 export default factory;
