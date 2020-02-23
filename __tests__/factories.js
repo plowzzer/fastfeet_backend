@@ -4,7 +4,6 @@ import { factory } from 'factory-girl';
 import User from '../src/app/models/User';
 import Recipient from '../src/app/models/Recipient';
 import Deliveryman from '../src/app/models/Deliveryman';
-import File from '../src/app/models/File';
 
 // https://github.com/marak/Faker.js/
 factory.define('User', User, {
