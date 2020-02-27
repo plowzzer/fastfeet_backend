@@ -86,7 +86,7 @@ class DeliverymanController {
       return res.status(400).json({ error: 'Validation Fails' });
     }
 
-    const deliveryman = await Deliveryman.findOne(id);
+    const deliveryman = await Deliveryman.findOne({ where: { id } });
 
     if (email && email !== deliveryman.email) {
       const checkEmail = await Deliveryman.findOne({ where: { email } });
@@ -108,9 +108,9 @@ class DeliverymanController {
     return res.json(deliveryman_updated);
   }
 
-  async delete(req, res) {
+  async destroy(req, res) {
     const { id } = req.params;
-    const deliveryman = await Deliveryman.findOne(id);
+    const deliveryman = await Deliveryman.findByPk(id);
 
     if (!deliveryman) {
       return res.status(404).json({ error: 'Deliverymen not found' });

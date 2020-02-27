@@ -75,7 +75,7 @@ class RecipientController {
     return res.json(resipient_updated);
   }
 
-  async delete(req, res) {
+  async destroy(req, res) {
     const { id } = req.params;
 
     const recipient = await Recipient.findByPk(id);
