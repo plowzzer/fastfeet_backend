@@ -59,7 +59,7 @@ describe('User', () => {
 
     const newName = faker.name.findName();
     const response = await request(app)
-      .put(`/users/${user.id}`)
+      .put(`/users`)
       .set({ Authorization: `Bearer ${token}` })
       .send({ name: newName });
 

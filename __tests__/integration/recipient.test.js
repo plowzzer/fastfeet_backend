@@ -1,4 +1,5 @@
 import request from 'supertest';
+import faker from 'faker';
 import app from '../../src/app';
 
 import factory from '../factories';
@@ -116,13 +117,14 @@ describe('Recipient', () => {
       .set({ Authorization: `Bearer ${token}` })
       .send(recipient);
 
+    const newName = faker.name.findName();
     const response = await request(app)
       .put(`/recipients/${recipientRes.body.id}`)
       .set({ Authorization: `Bearer ${token}` })
-      .send({ name: 'Edited' });
+      .send({ name: newName });
 
     expect(response.status).toBe(200);
-    expect(response.body.name).toBe('Edited');
+    expect(response.body.name).toBe(newName);
   });
 
   it('should not be able to delete a non existing recipient', async () => {
