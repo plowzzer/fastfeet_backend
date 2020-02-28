@@ -1,15 +1,28 @@
-import * as Yup from 'yup';
-import Delivery from '../models/Delivery';
-import Recipient from '../models/Recipient';
-import Deliveryman from '../models/Deliveryman';
+import { Op } from 'sequelize';
+import { parse, startOfToday, endOfToday, isBefore, isAfter } from 'date-fns';
 
-class DeliveryController {
+import Package from '../models/Package';
+import Recipient from '../models/Recipient';
+
+class PackagesController {
+  // Deliveryman getting the packages to delivery
   async index(req, res) {
     const { page = 1 } = req.query;
-    const deliveries = await Delivery.findAll({
+    const { deliveryman_id } = req.params;
+
+    const packages = await Package.findAll({
+      where: { deliveryman_id, canceled_at: null },
+      order: ['created_at'],
+      attributes: [
+        'id',
+        'product',
+        'start_date',
+        'end_date',
+        'end_date',
+        'canceled_at',
+      ],
       limit: 20,
       offset: (page - 1) * 20,
-      attributes: ['id', 'product', 'end_date', 'end_date', 'canceled_at'],
       include: [
         {
           model: Recipient,
@@ -25,50 +38,56 @@ class DeliveryController {
             'cep',
           ],
         },
-        {
-          model: Deliveryman,
-          as: 'deliveryman',
-          attributes: ['id', 'name', 'email'],
-        },
       ],
     });
 
-    return res.json(deliveries);
+    return res.json(packages);
   }
 
-  async store(req, res) {
-    const schema = Yup.object().shape({
-      product: Yup.string().required(),
-      recipient_id: Yup.number()
-        .required()
-        .positive()
-        .integer(),
-      deliveryman_id: Yup.number()
-        .required()
-        .positive()
-        .integer(),
+  // Deliveryman start to delivery a package
+  async create(req, res) {
+    const { deliveryman_id, id: package_id } = req.params;
+
+    const todayAmount = await Package.findAll({
+      where: {
+        deliveryman_id,
+        start_date: { [Op.between]: [startOfToday(), endOfToday()] },
+      },
+      attributes: ['id'],
     });
 
-    const { recipient_id, deliveryman_id } = req.body;
-
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation errors' });
+    if (todayAmount.length >= 5) {
+      return res
+        .status(400)
+        .json({ error: 'You have collected more then 5 packages today' });
     }
 
-    const recipient = await Recipient.findByPk(recipient_id);
+    const delivery = await Package.findOne({
+      where: { deliveryman_id, id: package_id },
+    });
 
-    if (!recipient) {
-      return res.status(400).json({ error: `Recipient not found` });
-    }
-    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
-    if (!deliveryman) {
-      return res.status(400).json({ error: `Deliveryman not found` });
+    if (!delivery) {
+      return res.status(401).json({ error: 'Delivery not found' });
     }
 
-    const delivery = await Delivery.create(req.body);
+    if (delivery.canceled_at !== null) {
+      return res.status(401).json({ error: 'This delivery is canceled' });
+    }
+
+    const startTodayWork = parse('8', 'HH', new Date());
+    const endTodayWork = parse('18', 'HH', new Date());
+    const tN = new Date();
+
+    if (!(isAfter(startTodayWork, tN) && isBefore(endTodayWork, tN))) {
+      return res.status(400).json({
+        error: 'You cannot start a delivery now, just after 8 and before 18',
+      });
+    }
+
+    await delivery.update({ start_date: tN });
 
     return res.json(delivery);
   }
 }
 
-export default new DeliveryController();
+export default new PackagesController();
