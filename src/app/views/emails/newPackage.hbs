@@ -1,20 +1,41 @@
 <strong>Olá, {{ deliveryman_name }}</strong>
 <p>Você possui um novo pacote para entrega</p>
 
-<p>
-  <strong>Cliente: </strong> {{ recipient_name }}<br />
-  <br />
-  <big>Informações de entrega</big>
-  <br />
-  <strong>Rua: </strong> {{ recipient_street }}<br />
-  <strong>Número: </strong> {{ recipient_number }}<br />
-  <strong>Complemento: </strong> {{ recipient_complement }}<br />
-  <strong>Cidade: </strong> {{ recipient_city }} - {{ recipient_state }}<br />
-  <strong>CEP: </strong> {{ recipient_cep }}<br />
-
-  <br />
-  <small>
-    Criado em: {{ created }}
-  </small>
-
-</p>
+<div>
+  <p><strong>Informações de entrega:</strong></p>
+  <table>
+    <tr>
+      <td>Cliente</td>
+      <td>{{ recipient_name }}</td>
+    </tr>
+    <tr>
+      <td>Rua</td>
+      <td>{{ recipient_street }}</td>
+    </tr>
+    <tr>
+      <td>Número</td>
+      <td>{{ recipient_number }}</td>
+    </tr>
+    <tr>
+      <td>Complemento</td>
+      <td>{{ recipient_complement }}</td>
+    </tr>
+    <tr>
+      <td>Cidade</td>
+      <td>{{ recipient_city }} - {{ recipient_state }}</td>
+    </tr>
+    <tr>
+      <td>CEP</td>
+      <td>{{ recipient_cep }}</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+  <p>
+    <small>
+      Criado em: {{ created }}
+    </small>
+  </p>
+</div>

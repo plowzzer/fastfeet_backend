@@ -54,11 +54,11 @@ class DeliverymanController {
       avatar_id: Yup.number().integer(),
     });
 
-    const { email } = req.body;
-
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation Fails' });
     }
+
+    const { email } = req.body;
 
     const checkEmail = await Deliveryman.findOne({ where: { email } });
 

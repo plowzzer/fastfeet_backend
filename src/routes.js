@@ -19,10 +19,16 @@ routes.post('/users', UserController.store);
 
 routes.post('/sessions', SessionController.store);
 
+// Deliveryman routes (detail, start and end of a delivery)
+// No token needed
 routes.get('/deliveryman/:deliveryman_id/deliveries', DeliveryController.index);
 routes.post(
   '/deliveryman/:deliveryman_id/deliveries/:id',
   DeliveryController.create
+);
+routes.put(
+  '/deliveryman/:deliveryman_id/deliveries/:id',
+  DeliveryController.update
 );
 
 // Needs to use the Token (only for administrators)

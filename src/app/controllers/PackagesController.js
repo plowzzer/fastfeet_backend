@@ -1,12 +1,12 @@
 import * as Yup from 'yup';
-import { parseISO, isBefore, format } from 'date-fns';
-import { pt } from 'date-fns/locale/pt-BR';
+import { parseISO, isBefore } from 'date-fns';
 
 import Package from '../models/Package';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
 
-import Mail from '../../lib/Mail';
+import NewPackage from '../jobs/NewPackage';
+import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async index(req, res) {
@@ -112,24 +112,7 @@ class DeliveryController {
 
     const delivery = await Package.create(req.body);
 
-    await Mail.sendMail({
-      to: `${deliveryman.name} <${deliveryman.email}>`,
-      subject: `Nova encomenda para você`,
-      template: 'newPackage',
-      context: {
-        deliveryman_name: deliveryman.name,
-        recipient_name: recipient.name,
-        recipient_street: recipient.street,
-        recipient_number: recipient.number,
-        recipient_complement: recipient.complement,
-        recipient_state: recipient.state,
-        recipient_city: recipient.city,
-        recipient_cep: recipient.cep,
-        created: format(new Date(), "dd 'de' MMMM', às' H:mm'h'", {
-          locale: pt,
-        }),
-      },
-    });
+    await Queue.add(NewPackage.key, { deliveryman, recipient });
 
     return res.json(delivery);
   }

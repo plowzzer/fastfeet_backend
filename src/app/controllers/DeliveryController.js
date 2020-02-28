@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import { parse, startOfToday, endOfToday, isBefore, isAfter } from 'date-fns';
 
@@ -87,6 +88,42 @@ class PackagesController {
     await delivery.update({ start_date: tN });
 
     return res.json(delivery);
+  }
+
+  // Deliveryman delivering the package
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      signature_id: Yup.number()
+        .integer()
+        .required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation Fails' });
+    }
+
+    const { signature_id } = req.body;
+
+    const { deliveryman_id, id: package_id } = req.params;
+
+    const delivery = await Package.findOne({
+      where: { deliveryman_id, id: package_id },
+    });
+
+    if (!delivery) {
+      return res.status(401).json({ error: 'Delivery not found' });
+    }
+
+    if (delivery.canceled_at !== null) {
+      return res.status(401).json({ error: 'This delivery is canceled' });
+    }
+
+    const response = await delivery.update({
+      signature_id,
+      end_date: new Date(),
+    });
+
+    return res.json(response);
   }
 }
 
