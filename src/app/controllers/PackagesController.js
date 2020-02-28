@@ -1,9 +1,12 @@
 import * as Yup from 'yup';
-import { parseISO, isBefore } from 'date-fns';
+import { parseISO, isBefore, format } from 'date-fns';
+import { pt } from 'date-fns/locale/pt-BR';
 
 import Package from '../models/Package';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
+
+import Mail from '../../lib/Mail';
 
 class DeliveryController {
   async index(req, res) {
@@ -100,12 +103,33 @@ class DeliveryController {
     if (!recipient) {
       return res.status(400).json({ error: `Recipient not found` });
     }
-    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
+    const deliveryman = await Deliveryman.findByPk(deliveryman_id, {
+      attributes: ['name', 'email'],
+    });
     if (!deliveryman) {
       return res.status(400).json({ error: `Deliveryman not found` });
     }
 
     const delivery = await Package.create(req.body);
+
+    await Mail.sendMail({
+      to: `${deliveryman.name} <${deliveryman.email}>`,
+      subject: `Nova encomenda para você`,
+      template: 'newPackage',
+      context: {
+        deliveryman_name: deliveryman.name,
+        recipient_name: recipient.name,
+        recipient_street: recipient.street,
+        recipient_number: recipient.number,
+        recipient_complement: recipient.complement,
+        recipient_state: recipient.state,
+        recipient_city: recipient.city,
+        recipient_cep: recipient.cep,
+        created: format(new Date(), "dd 'de' MMMM', às' H:mm'h'", {
+          locale: pt,
+        }),
+      },
+    });
 
     return res.json(delivery);
   }

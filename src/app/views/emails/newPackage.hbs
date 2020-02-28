@@ -1,0 +1,20 @@
+<strong>Olá, {{ deliveryman_name }}</strong>
+<p>Você possui um novo pacote para entrega</p>
+
+<p>
+  <strong>Cliente: </strong> {{ recipient_name }}<br />
+  <br />
+  <big>Informações de entrega</big>
+  <br />
+  <strong>Rua: </strong> {{ recipient_street }}<br />
+  <strong>Número: </strong> {{ recipient_number }}<br />
+  <strong>Complemento: </strong> {{ recipient_complement }}<br />
+  <strong>Cidade: </strong> {{ recipient_city }} - {{ recipient_state }}<br />
+  <strong>CEP: </strong> {{ recipient_cep }}<br />
+
+  <br />
+  <small>
+    Criado em: {{ created }}
+  </small>
+
+</p>
