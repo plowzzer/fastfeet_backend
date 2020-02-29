@@ -4,6 +4,7 @@ import { parseISO, isBefore } from 'date-fns';
 import Package from '../models/Package';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
+import File from '../models/File';
 
 import NewPackage from '../jobs/NewPackage';
 import Queue from '../../lib/Queue';
@@ -72,6 +73,11 @@ class DeliveryController {
           model: Deliveryman,
           as: 'deliveryman',
           attributes: ['id', 'name', 'email'],
+        },
+        {
+          model: File,
+          as: 'signature',
+          attributes: ['url', 'path'],
         },
       ],
     });

@@ -7,6 +7,7 @@ import RecipientController from './app/controllers/RecipientController';
 import DeliverymanController from './app/controllers/DeliverymanController';
 import PackagesController from './app/controllers/PackagesController';
 import DeliveryController from './app/controllers/DeliveryController';
+import DeliveryProblemController from './app/controllers/DeliveryProblemController';
 
 import FileController from './app/controllers/FileController';
 
@@ -30,6 +31,13 @@ routes.put(
   '/deliveryman/:deliveryman_id/deliveries/:id',
   DeliveryController.update
 );
+
+// Delivery Problems
+routes.get('/delivery/:id/problems', DeliveryProblemController.show);
+routes.post('/delivery/:id/problems', DeliveryProblemController.create);
+
+routes.get('/problems', DeliveryProblemController.index);
+routes.delete('/problems/:id/cancel', DeliveryProblemController.delete);
 
 // Needs to use the Token (only for administrators)
 routes.use(authMiddleware);

@@ -4,6 +4,7 @@ import { parse, startOfToday, endOfToday, isBefore, isAfter } from 'date-fns';
 
 import Package from '../models/Package';
 import Recipient from '../models/Recipient';
+import DeliveryProblem from '../models/DeliveryProblem';
 
 class PackagesController {
   // Deliveryman getting the packages to delivery
@@ -14,6 +15,8 @@ class PackagesController {
     const packages = await Package.findAll({
       where: { deliveryman_id, canceled_at: null },
       order: ['created_at'],
+      limit: 20,
+      offset: (page - 1) * 20,
       attributes: [
         'id',
         'product',
@@ -22,8 +25,6 @@ class PackagesController {
         'end_date',
         'canceled_at',
       ],
-      limit: 20,
-      offset: (page - 1) * 20,
       include: [
         {
           model: Recipient,
