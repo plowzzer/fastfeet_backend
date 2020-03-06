@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { parseISO, isBefore } from 'date-fns';
+import { Op } from 'sequelize';
 
 import Package from '../models/Package';
 import Recipient from '../models/Recipient';
@@ -11,8 +12,13 @@ import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const { q: productName = '', page = 1 } = req.query;
     const deliveries = await Package.findAll({
+      where: {
+        product: {
+          [Op.iLike]: `${productName}%`,
+        },
+      },
       limit: 20,
       offset: (page - 1) * 20,
       attributes: [
