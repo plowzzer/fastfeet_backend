@@ -32,6 +32,9 @@ routes.put(
   DeliveryController.update
 );
 
+// Deliveryman with no token
+routes.get('/deliverymen/:id', DeliverymanController.details);
+
 // Delivery Problems
 routes.get('/delivery/:id/problems', DeliveryProblemController.show);
 routes.post('/delivery/:id/problems', DeliveryProblemController.create);
@@ -50,7 +53,6 @@ routes.put('/recipients/:id', RecipientController.update);
 routes.delete('/recipients/:id', RecipientController.destroy);
 
 routes.get('/deliverymen', DeliverymanController.index);
-routes.get('/deliverymen/:id', DeliverymanController.details);
 routes.post('/deliverymen', DeliverymanController.store);
 routes.put('/deliverymen/:id', DeliverymanController.update);
 routes.delete('/deliverymen/:id', DeliverymanController.destroy);
