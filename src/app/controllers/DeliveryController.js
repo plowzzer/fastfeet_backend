@@ -12,29 +12,29 @@ class PackagesController {
     const { deliveryman_id } = req.params;
     const { status = '' } = req.query;
 
+    const initialQuery = {
+      deliveryman_id,
+      canceled_at: null,
+    };
+
     function statusQuery(like) {
       switch (like) {
         case 'PENDING':
           return {
-            deliveryman_id,
-            canceled_at: null,
+            ...initialQuery,
             end_date: null,
           };
 
         case 'DONE':
           return {
-            deliveryman_id,
-            canceled_at: null,
+            ...initialQuery,
             end_date: {
               [Op.not]: null,
             },
           };
 
         default:
-          return {
-            deliveryman_id,
-            canceled_at: null,
-          };
+          return initialQuery;
       }
     }
 
