@@ -11,6 +11,9 @@ class PackagesController {
   async index(req, res) {
     const { page = 1 } = req.query;
     const { deliveryman_id } = req.params;
+    const { q: status = '' } = req.query;
+
+    console.log('REQUEST,', status);
 
     const packages = await Package.findAll({
       where: { deliveryman_id, canceled_at: null },
@@ -22,8 +25,8 @@ class PackagesController {
         'product',
         'start_date',
         'end_date',
-        'end_date',
         'canceled_at',
+        'status',
       ],
       include: [
         {
@@ -80,9 +83,9 @@ class PackagesController {
     const endTodayWork = parse('18', 'HH', new Date());
     const tN = new Date();
 
-    if (!(isAfter(startTodayWork, tN) && isBefore(endTodayWork, tN))) {
+    if (!(isBefore(startTodayWork, tN) && isAfter(endTodayWork, tN))) {
       return res.status(400).json({
-        error: 'You cannot start a delivery now, just after 8 and before 18',
+        error: `You cannot start a delivery now, just after 8 and before 18`,
       });
     }
 
