@@ -4,19 +4,44 @@ import { parse, startOfToday, endOfToday, isBefore, isAfter } from 'date-fns';
 
 import Package from '../models/Package';
 import Recipient from '../models/Recipient';
-import DeliveryProblem from '../models/DeliveryProblem';
 
 class PackagesController {
   // Deliveryman getting the packages to delivery
   async index(req, res) {
     const { page = 1 } = req.query;
     const { deliveryman_id } = req.params;
-    const { q: status = '' } = req.query;
+    const { status = '' } = req.query;
 
-    console.log('REQUEST,', status);
+    function statusQuery(like) {
+      switch (like) {
+        case 'PENDING':
+          return {
+            deliveryman_id,
+            canceled_at: null,
+            end_date: null,
+          };
+
+        case 'DONE':
+          return {
+            deliveryman_id,
+            canceled_at: null,
+            end_date: {
+              [Op.not]: null,
+            },
+          };
+
+        default:
+          return {
+            deliveryman_id,
+            canceled_at: null,
+          };
+      }
+    }
+
+    const query = statusQuery(status);
 
     const packages = await Package.findAll({
-      where: { deliveryman_id, canceled_at: null },
+      where: query,
       order: ['created_at'],
       limit: 20,
       offset: (page - 1) * 20,
