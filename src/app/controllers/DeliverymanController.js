@@ -33,7 +33,7 @@ class DeliverymanController {
 
     const deliveryman = await Deliveryman.findOne({
       where: { id },
-      attributes: ['id', 'name', 'email'],
+      attributes: ['id', 'name', 'email', 'createdAt'],
       include: [
         {
           model: File,
