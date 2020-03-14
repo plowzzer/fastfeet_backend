@@ -64,7 +64,7 @@ class DeliveryProblemsController {
           ],
         },
       ],
-      attributes: ['id', 'description'],
+      attributes: ['id', 'description', 'createdAt'],
     });
 
     return res.json(deliveryPromblens);

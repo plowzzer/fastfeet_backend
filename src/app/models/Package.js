@@ -4,13 +4,13 @@ class Package extends Model {
   static init(sequelize) {
     function getStatusValue(thisPackage) {
       if (thisPackage.start_date === null && thisPackage.end_date === null) {
-        return 'AGURADANDO';
+        return 'AWAITING';
       }
       if (thisPackage.start_date !== null && thisPackage.end_date === null) {
-        return 'RETIRADA';
+        return 'WITHDRAWN';
       }
       if (thisPackage.start_date !== null && thisPackage.end_date !== null) {
-        return 'ENTREGUE';
+        return 'DELIVERED';
       }
       return 'BUG';
     }
