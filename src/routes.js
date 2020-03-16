@@ -42,6 +42,8 @@ routes.post('/delivery/:id/problems', DeliveryProblemController.create);
 routes.get('/problems', DeliveryProblemController.index);
 routes.delete('/problems/:id/cancel', DeliveryProblemController.delete);
 
+routes.post('/files', upload.single('file'), FileController.store);
+
 // Needs to use the Token (only for administrators)
 routes.use(authMiddleware);
 routes.put('/users', UserController.update);
@@ -62,7 +64,5 @@ routes.get('/packages/:id', PackagesController.details);
 routes.post('/packages', PackagesController.store);
 routes.put('/packages/:id', PackagesController.update);
 routes.delete('/packages/:id', PackagesController.destroy);
-
-routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;
