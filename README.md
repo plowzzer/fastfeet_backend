@@ -10,6 +10,7 @@ Parte Backend do desenvolvimento da aplicação do Fastfeet (https://github.com/
 - Rode os comandos abaixo para instalar as imagens do Docker
 - Copie o `.env.exemple` para `.env` com as suas variaveis de ambiente
 - Rode `yarn sequelize db:migrate` para executar as migrations;
+- Você pode usar o Insomnia para validar os endpoints e documentação atraves do arquivo `Insomnia.json`
 
 #### Docker files:
 
