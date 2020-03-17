@@ -6,11 +6,13 @@ Parte Backend do desenvolvimento da aplicação do Fastfeet (https://github.com/
 
 ### 💻 Instalação, execução e desenvolvimento
 
-- To run the development server: `yarn dev`
+- Instale os pacotes com: `yarn`
+- Rode `docker-compose up` para montar o ambiente;
 - Rode os comandos abaixo para instalar as imagens do Docker
 - Copie o `.env.exemple` para `.env` com as suas variaveis de ambiente
 - Rode `yarn sequelize db:migrate` para executar as migrations;
 - Você pode usar o Insomnia para validar os endpoints e documentação atraves do arquivo `Insomnia.json`
+- Para entrar em ambiente de desenvolvimento use `yarn dev`
 
 #### Docker files:
 
