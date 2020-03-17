@@ -15,4 +15,5 @@ Parte Backend do desenvolvimento da aplicação do Fastfeet (https://github.com/
 #### Docker files:
 
 `docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres`
+
 `docker run --name redisFestfeet -p 6379:6379 -d -t redis:alpine`
